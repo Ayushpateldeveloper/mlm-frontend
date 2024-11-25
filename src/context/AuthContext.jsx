@@ -10,12 +10,15 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+   // Base URL from environment variable
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  
   // Validate token with backend
   const validateToken = async (token) => {
     try {
       console.log('Attempting to validate token:', token);
       
-      const response = await axios.get('http://localhost:5000/api/auth/validate', {
+      const response = await axios.get('${BASE_URL}/api/auth/validate', {
         headers: { 
           'Authorization': `Bearer ${token}` 
         }
@@ -34,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('Attempting login for:', email);
       
-      const response = await axios.post('http://localhost:5000/api/auth/login', { 
+      const response = await axios.post('${BASE_URL}/api/auth/login', { 
         email, 
         password 
       });
@@ -97,7 +100,7 @@ export const AuthProvider = ({ children }) => {
           if (isValid) {
             // Fetch user data if token is valid
             try {
-              const response = await axios.get('http://localhost:5000/api/auth/me', {
+              const response = await axios.get('${BASE_URL}/api/auth/me', {
                 headers: { 
                   'Authorization': `Bearer ${token}` 
                 }
