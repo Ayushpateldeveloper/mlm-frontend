@@ -7,7 +7,9 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
+   // Base URL from environment variable
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  
     // Function to verify token and restore session
     const verifyToken = async () => {
         const token = localStorage.getItem('token');
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             // Verify token with backend
-            const response = await axios.get('/auth/verify-token', {
+            const response = await axios.get('${BASE_URL}/auth/verify-token', {
                 headers: { 
                     'Authorization': `Bearer ${token}` 
                 }
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children }) => {
                 timestamp: new Date().toISOString() 
             });
 
-            const response = await axios.post('/auth/register', { 
+            const response = await axios.post('${BASE_URL}/auth/register', { 
                 username,
                 email, 
                 password 
@@ -114,7 +116,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post('/auth/login', { email, password });
+            const response = await axios.post('${BASE_URL}/auth/login', { email, password });
             
             console.log('Login Response:', {
                 tokenPresent: !!response.data.token,
